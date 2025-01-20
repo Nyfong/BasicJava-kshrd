@@ -8,12 +8,19 @@ class test {
     public static void main(String args[])
     {
 
+
+
+
+
+
+
+
         // Create a pattern to be searched
         // Custom pattern
-//        Pattern p = Pattern.compile("[^a-z]");
-        Pattern p = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"); // for email
-        String compare = "test@gmail.com";
-
+    Pattern p = Pattern.compile("apples?");
+      //  Pattern p = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"); // for email
+       // String compare = "test@gmail.com";
+        String compare = "apples";
         Matcher m = p.matcher(compare);
 
         while (m.find()) System.out.print("" + m.group(0) +", ");
