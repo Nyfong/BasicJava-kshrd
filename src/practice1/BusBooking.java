@@ -6,17 +6,23 @@ public class BusBooking {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         boolean installChair = true;
+        String input = "";
         int tableNumber = 0;
         String GREEN = "\u001B[32m", RED = "\u001B[31m", RESET = "\u001B[30m";
         while (installChair) {
             System.out.println("========== SET UP CHAIR IN BUS ==========");
             System.out.print("-> Enter the seat of the bus between [25 - 45]:");
-            tableNumber = sc.nextInt();
-            if (tableNumber >= 25 && tableNumber <= 45) installChair = false;
-            else System.out.println(RED + " Please enter the seat of the bus between [25 - 45] !!!" + RESET);
+            input = sc.nextLine();
+            if(input.matches("\\d+")){
+                tableNumber = Integer.parseInt(input);
+                if (tableNumber >= 25 && tableNumber <= 45) installChair = false;
+                else System.out.println(RED + " Please enter the seat of the bus between [25 - 45] !!!" + RESET);
+            }
+
+
         }
         int tableArrBus[] = new int[tableNumber];
-        String input = "";
+
         System.out.println("\n");
         int row = 0, inStock = 0, outStock = 0, chairNumber, inStockCount = 0, outStockCount = 0;
         boolean outerLoop = true;
