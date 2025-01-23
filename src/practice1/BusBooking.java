@@ -1,5 +1,7 @@
 package practice1;
+
 import java.util.Scanner;
+
 public class BusBooking {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -19,7 +21,7 @@ public class BusBooking {
         int row = 0, inStock = 0, outStock = 0, chairNumber, inStockCount = 0, outStockCount = 0;
         boolean outerLoop = true;
         do {
-            System.out.print("\n---------- DISPLAY BUS INFORMATION ----------\n");
+            System.out.print("\n---------- DISPLAY BUS INFORMATION ----------");
             for (int i = 0; i < tableArrBus.length; i += 1) {
                 if (row % 5 == 0)
                     System.out.println(" ");
@@ -36,8 +38,7 @@ public class BusBooking {
                     outStockCount++;
                 outStock = tableNumber - inStockCount;
             }
-
-            System.out.println("\n"+outStock + RED + "(-)Unavaiable," + RESET + inStock + GREEN + " (+)Avaiable" + RESET);
+            System.out.println("\n" + outStock + RED + "(-)Unavaiable," + RESET + inStock + GREEN + " (+)Avaiable" + RESET);
             System.out.println("");
             //RESET
             inStock = 0;
@@ -102,5 +103,6 @@ public class BusBooking {
                 } else System.out.println(RED + "Wrong input. please Input only(Y/N)" + RESET); // when wrong input
             }
         } while (outerLoop);
+        sc.close();
     }
 }
