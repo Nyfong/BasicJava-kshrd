@@ -5,7 +5,6 @@ import org.nocrala.tools.texttablefmt.CellStyle;
 import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class CenimaValidate {
@@ -20,7 +19,7 @@ public class CenimaValidate {
         int increase = 0;
         int hallNumber = 0, seatNumber;
         boolean condition = true;
-        //initilized the arary
+        //initialized the array
         int[][] cinmaStorage = new int[TEST_ROW][TEST_COL];
         String[][] movieStorage = new String[TEST_ROW][6];
         String GREEN = "\u001B[32m", RED = "\u001B[31m", RESET = "\u001B[30m";
@@ -112,13 +111,9 @@ public class CenimaValidate {
                         if (input.equalsIgnoreCase("y")) {
                             if (increase >= cinmaStorage.length) {
                                 System.out.println(RED + "Overload the Storage of Hall :)" + RESET);
-                                reuseAble = false;
                             } else {
                                 reuseAble = true;
                             }
-                        } else {
-
-                            reuseAble = false;
                         }
                     }
                 }
@@ -154,6 +149,7 @@ public class CenimaValidate {
                                 }
                                 // Print the table
                                 System.out.println(table.render());
+                                outerMenuOfBooking:
                                 do {
                                     System.out.println("[1]. Booking movie \t[2]. First\t[3]. Next\t[4]. Previous\t[5]. Last\t[6]. Exit ");
                                     input = sc.nextLine();
@@ -175,7 +171,7 @@ public class CenimaValidate {
                                                         checkId:
                                                         if (movieId <= cinmaStorage.length && movieId > 0) {
                                                             if (movieStorage[movieId - 1][0] != null) {
-                                                                if (movieId > 0 && movieId <= cinmaStorage.length) {
+                                                                {
                                                                     if (cinmaStorage[movieId - 1] != null) {
                                                                         int row = 0;
                                                                         //a
@@ -190,7 +186,6 @@ public class CenimaValidate {
                                                                         }
                                                                         System.out.println();
                                                                         //a
-                                                                        reuseAble = true;
                                                                         while (reuseAble) {
                                                                             System.out.println("\n[1]. Booking Ticket\t[2]. Back");
                                                                             input = sc.nextLine();
@@ -199,7 +194,7 @@ public class CenimaValidate {
                                                                                 int count = 0;
                                                                                 boolean agin = true;
                                                                                 if (optionCaseBooking == 1) {
-
+                                                                                    checkifItEqualZero:
                                                                                     while (agin) {
                                                                                         System.out.print("\nChoose seat you want to Booking (e.g., 1,2,3,4..): ");
                                                                                         input = sc.nextLine();
@@ -210,12 +205,15 @@ public class CenimaValidate {
                                                                                             for (int i = 0; i < numberStrings.length; i++) {
                                                                                                 numbers[i] = Integer.parseInt(numberStrings[i].trim());
                                                                                                 count += 1;
+                                                                                                if(numbers[i] == 0){
+                                                                                                    System.out.println("err");
+                                                                                                    break checkifItEqualZero;
+                                                                                                }
                                                                                             }
 
-                                                                                            //System.out.println("Seats booked: " + java.util.Arrays.toString(numbers));
-                                                                                            System.out.println(Arrays.toString(numbers));
+//                                                                                          System.out.println(Arrays.toString(numbers));
                                                                                             System.out.println(movieId);
-
+                                                                                            bookedSeat:
                                                                                             if (numbers.length < cinmaStorage[movieId - 1].length) {
                                                                                                 for (int dataBook = 0; dataBook <= cinmaStorage[movieId - 1].length; dataBook += 1) {
                                                                                                     for (int dataTaken : numbers) {
@@ -224,6 +222,7 @@ public class CenimaValidate {
                                                                                                             if (cinmaStorage[movieId - 1][dataBook - 1] == dataTaken) {
                                                                                                                 System.out.println("The seat has been booked");
                                                                                                                 agin = true;
+                                                                                                                break  bookedSeat;
                                                                                                             } else {
                                                                                                                 cinmaStorage[movieId - 1][dataBook - 1] = dataTaken;
                                                                                                             }
@@ -231,14 +230,11 @@ public class CenimaValidate {
                                                                                                     }
                                                                                                 }
                                                                                             } else
-                                                                                                System.out.println(RED + "enter agin please" + RESET);
+                                                                                                System.out.println(RED + "enter again please" + RESET);
                                                                                         } else {
                                                                                             System.out.println("Please enter example (1,2,3,4,5)");
-                                                                                            agin = true;
                                                                                         }
                                                                                     }
-
-                                                                                    System.out.println(Arrays.deepToString(cinmaStorage));
                                                                                     reuseAble = false;
                                                                                 } else if (optionCaseBooking == 2) {
                                                                                     reuseAble = false;
@@ -249,13 +245,9 @@ public class CenimaValidate {
                                                                                 System.out.println("Invalid input. Please enter numbers only.");
                                                                             }
                                                                         }
-
                                                                     } else {
-                                                                        reuseAble = true;
                                                                         System.out.println(RED + "There is no move show" + RESET);
                                                                     }
-                                                                } else {
-                                                                    System.out.println("Please input a valid movie ID.");
                                                                 }
                                                             } else {
                                                                 System.out.println(RED + "The hall is not yet upload movie" + RESET);
@@ -265,13 +257,28 @@ public class CenimaValidate {
                                                         } else {
                                                             System.out.println(RED + "The hall has only #" + cinmaStorage.length + ":))" + RESET);
                                                         }
-
-
                                                     } else {
                                                         System.out.println(RED + "Invalid input. Please enter a number." + RESET);
                                                     }
                                                 }
                                             }
+                                            case 2 -> {
+                                                System.out.println("2");
+                                            }
+                                            case 3 -> {
+                                                System.out.println("3");
+                                            }
+                                            case 4 -> {
+                                                System.out.println("4");
+                                            }
+                                            case 5 -> {
+                                                System.out.println("5");
+                                            }
+                                            case 6 -> {
+                                                System.out.println("Thank you so much");
+                                                break outerMenuOfBooking;
+                                            }
+
                                             // Add cases for 2, 3, 4, 5, and 6 as needed
                                             default ->
                                                     System.out.println("Invalid option. Please choose a valid option (1-6).");
@@ -300,17 +307,16 @@ public class CenimaValidate {
                         if (movieStorage[hall][0] == null) {
                             continue;
                         }
-
                         String bookedSeats = "";
                         int totalBooked = 0;
-
                         // Count booked seats and create list of seat numbers
                         for (int seat = 0; seat < cinmaStorage[hall].length; seat++) {
-
+                            if (cinmaStorage[hall][seat] != 0) {
+                                bookedSeats += (bookedSeats.isEmpty() ? "" : ", ") + (seat + 1);
                                 totalBooked++;
-
+                                hasAnyBookings = true;
+                            }
                         }
-
                         // If hall has bookings, show the information
                         if (totalBooked > 0) {
                             System.out.println("\n============================");
@@ -318,6 +324,8 @@ public class CenimaValidate {
                             System.out.println("Movie: " + movieStorage[hall][0]);
                             System.out.println("Type: " + movieStorage[hall][1]);
                             System.out.println("Duration: " + movieStorage[hall][2] + " minutes");
+                            System.out.println("Booked Seats: " + bookedSeats);
+                            System.out.println("Available Seats: " + (cinmaStorage[hall].length - totalBooked));
                             System.out.println("============================");
                         }
                     }
@@ -328,6 +336,14 @@ public class CenimaValidate {
 
                     System.out.println("\nPress Enter to continue...");
                     sc.nextLine();
+                }
+                case 4 -> {
+                    for(int i =0; i < cinmaStorage.length; i+=1){
+                        for(int j =0; j<cinmaStorage[i].length; j+=1){
+                            cinmaStorage[i][j] = 0;
+                        }
+                    }
+                    System.out.println(GREEN + "all hall is already reset" + RESET);
                 }
                 case 6 -> {
                     System.out.println("Thank you for using the system");
