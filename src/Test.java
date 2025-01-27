@@ -1,9 +1,13 @@
-import testpackage.Test1;
 
-public class Test {
-    public static void main(String[] args) {
-        Test1 test1 = new Test1();
-        test1.print();
+
+public class Test{
+
+    public void n(){
+        System.out.println("a");
     }
-}
+    public static void main(String[] args) {
+        Test o = new Test();
+        o.n();
+    }
 
+}
