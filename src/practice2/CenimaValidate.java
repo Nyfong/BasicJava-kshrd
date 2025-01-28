@@ -11,13 +11,13 @@ public class CenimaValidate {
     final static int TEST_ROW = 3;
     final static int TEST_COL = 3;
     //final static int MOVIE_SAMPLE = 3;
-
     public static void main(String[] args) {
         //scanner
         Scanner sc = new Scanner(System.in);
         String input;
         int increase = 0;
         int hallNumber = 0, seatNumber;
+        int optionSetRow = 0;
         boolean condition = true;
         //initialized the array
         int[][] cinmaStorage = new int[TEST_ROW][TEST_COL];
@@ -37,12 +37,12 @@ public class CenimaValidate {
                         input = sc.nextLine();
                         if (input.matches("\\d+")) {
                             seatNumber = Integer.parseInt(input);
-                            if (seatNumber > 19) {
+                            if (seatNumber > 49) {
                                 System.out.println(GREEN + "adding seat success" + RESET);
                                 cinmaStorage = new int[hallNumber][seatNumber];
                                 settingUpCinema = false;
                             } else {
-                                System.out.println(RED + "The seat is more than or equal to 20 :)" + RESET);
+                                System.out.println(RED + "The seat is more than or equal to 50 :)" + RESET);
                             }
                         } else System.out.println(RED + "The hall is grater than 20" + RESET);
 
@@ -106,50 +106,94 @@ public class CenimaValidate {
                         movieStorage[increase][2] = String.valueOf(setHour);
                         increase += 1;
                         System.out.println(GREEN + movieName + RESET + " will show in Hall #" + increase);
-                        System.out.println("Do you want to insert more movie? (Y/N)");
-                        input = sc.nextLine();
-                        if (input.equalsIgnoreCase("y")) {
-                            if (increase >= cinmaStorage.length) {
-                                System.out.println(RED + "Overload the Storage of Hall :)" + RESET);
+                        boolean askingAgain = true;
+                        while (askingAgain) {
+                            System.out.println("Do you want to insert more movie? (Y/N)");
+                            input = sc.nextLine();
+                            if (input.equalsIgnoreCase("y")) {
+                                if (increase >= cinmaStorage.length) {
+                                    System.out.println(RED + "Overload the Storage of Hall :)" + RESET);
+                                    reuseAble = false;
+                                    askingAgain = false;
+                                } else {
+                                    reuseAble = true;
+                                    askingAgain = false;
+                                }
+                            } else if (input.equalsIgnoreCase("N")) {
+                                System.out.println(RED + "Thank :)" + RESET);
+                                askingAgain = false;
                             } else {
-                                reuseAble = true;
+                                askingAgain = true;
                             }
                         }
                     }
                 }
                 case 2 -> {
+                    int toBreakloop = 0;
                     outerLoop:
                     for (String[] strings : movieStorage) {
                         for (int y = 0; y < strings.length; y += 1) {
-                            if (strings[y] != null) {
-                                // display movie
-                                String[] headers = {"ID", "Movie", "Type", "Duration", "Hall", "Seat", "Available"};
+                            if (strings[toBreakloop] != null) {
                                 //for case 2 ng ha
                                 int optionCase2, movieId;
                                 System.out.println("Display all movie");
+                                String[] headers = {"ID", "Movie", "Type", "Duration", "Hall", "Seat", "Available"};
+                                //pkert table rg
                                 Table table = new Table(headers.length, BorderStyle.CLASSIC, ShownBorders.ALL, false);
                                 CellStyle cellStyle = new CellStyle(CellStyle.HorizontalAlign.center);
-                                // Add headers to the table
+
+                                //display header rg
                                 for (String header : headers) {
                                     table.addCell(header, cellStyle);
                                 }
-
-                                //  data rows to the table
-                                for (int i = 0; i < movieStorage.length; i++) {
-                                    if (movieStorage[i][0] == null) {
-                                        continue; // Skip this iteration and move to the next row
+                                if (optionSetRow > 0) {
+                                    for (int hall = 0; hall < optionSetRow; hall++) {
+                                        // Skip if no movie in this hall
+                                        if (movieStorage[hall][0] == null) {
+                                            continue;
+                                        }
+                                        // Count booked seats
+                                        int totalBooked = 0;
+                                        for (int seat = 0; seat < cinmaStorage[hall].length; seat++) {
+                                            if (cinmaStorage[hall][seat] != 0) {
+                                                totalBooked++;
+                                            }
+                                        }
+                                        // Add data rows to the table
+                                        table.addCell(String.valueOf(hall + 1), cellStyle); // ID
+                                        table.addCell(movieStorage[hall][0], cellStyle); // Movie
+                                        table.addCell(movieStorage[hall][1], cellStyle); // Type
+                                        table.addCell(movieStorage[hall][2], cellStyle); // Duration
+                                        table.addCell(String.valueOf(hall + 1), cellStyle); // Hall
+                                        table.addCell(String.valueOf(cinmaStorage[hall].length), cellStyle); // Total Seats
+                                        table.addCell(String.valueOf(cinmaStorage[hall].length - totalBooked), cellStyle); // Available Seats
                                     }
-                                    table.addCell(String.valueOf(i + 1), cellStyle); // ID
-                                    table.addCell((movieStorage[i][0] == null ? (RED + "No movie show" + RESET) : (GREEN + movieStorage[i][0] + RESET)), cellStyle);    // Movie
-                                    table.addCell((movieStorage[i][1] == null ? (RED + "No type show" + RESET) : (GREEN + movieStorage[i][1] + RESET)), cellStyle);    // Type
-                                    table.addCell((movieStorage[i][2] == null ? (RED + "No duration show" + RESET) : (GREEN + movieStorage[i][2] + RESET)), cellStyle);    // Duration
-                                    table.addCell(String.valueOf((i + 1)), cellStyle);    // Hall
-                                    table.addCell(movieStorage[i][4], cellStyle);    // Seat
-                                    table.addCell(movieStorage[i][5], cellStyle);    // Available
+                                } else {
+                                    for (int hall = 0; hall < cinmaStorage.length; hall++) {
+                                        // Skip if no movie in this hall
+                                        if (movieStorage[hall][0] == null) {
+                                            continue;
+                                        }
+                                        // Count booked seats
+                                        int totalBooked = 0;
+                                        for (int seat = 0; seat < cinmaStorage[hall].length; seat++) {
+                                            if (cinmaStorage[hall][seat] != 0) {
+                                                totalBooked++;
+                                            }
+                                        }
+                                        // Add data rows to the table
+                                        table.addCell(String.valueOf(hall + 1), cellStyle); // ID
+                                        table.addCell(movieStorage[hall][0], cellStyle); // Movie
+                                        table.addCell(movieStorage[hall][1], cellStyle); // Type
+                                        table.addCell(movieStorage[hall][2], cellStyle); // Duration
+                                        table.addCell(String.valueOf(hall + 1), cellStyle); // Hall
+                                        table.addCell(String.valueOf(cinmaStorage[hall].length), cellStyle); // Total Seats
+                                        table.addCell(String.valueOf(cinmaStorage[hall].length - totalBooked), cellStyle); // Available Seats
+                                    }
                                 }
-                                // Print the table
+                                // print the table
                                 System.out.println(table.render());
-                                outerMenuOfBooking:
+
                                 do {
                                     System.out.println("[1]. Booking movie \t[2]. First\t[3]. Next\t[4]. Previous\t[5]. Last\t[6]. Exit ");
                                     input = sc.nextLine();
@@ -177,42 +221,55 @@ public class CenimaValidate {
                                                                         //a
                                                                         System.out.println("Title: " + movieStorage[movieId - 1][0] + "\t\t Hall ID #" + movieId);
                                                                         System.out.println("\t\t---------- Screen ---------- ");
+//
+                                                                        // Create a table for the movie title and hall ID
+                                                                        Table titleTable = new Table(1, BorderStyle.CLASSIC, ShownBorders.ALL, false);
+                                                                        CellStyle titleStyle = new CellStyle(CellStyle.HorizontalAlign.center);
+
+                                                                        // Print the title table
+                                                                        System.out.println(titleTable.render());
+
+                                                                        // Create a table for the screen and seats
+                                                                        Table seatTable = new Table(5, BorderStyle.CLASSIC, ShownBorders.ALL, false);
+                                                                        CellStyle seatStyle = new CellStyle(CellStyle.HorizontalAlign.center);
+
+                                                                        // Add header for the screen
+                                                                        seatTable.addCell("---------- Screen ----------", seatStyle, 5);
+
+                                                                        // Add seat availability to the table
                                                                         for (int i = 0; i < cinmaStorage[movieId - 1].length; i++) {
-                                                                            if (row % 5 == 0) System.out.println();
-                                                                            if (cinmaStorage[movieId - 1].length != 0) {
-                                                                                System.out.print(cinmaStorage[movieId - 1][i] != 0 ? (RED + "[" + (i + 1) + "] Unavailable seat\t" + RESET) : (GREEN + "[" + (i + 1) + "] Available Seat\t" + RESET));
+                                                                            if (cinmaStorage[movieId - 1][i] != 0) {
+                                                                                seatTable.addCell(RED + "[" + (i + 1) + "] Unavailable seat" + RESET, seatStyle);
+                                                                            } else {
+                                                                                seatTable.addCell(GREEN + "[" + (i + 1) + "] Available Seat" + RESET, seatStyle);
                                                                             }
                                                                             row++;
                                                                         }
+
+                                                                        // Print the seat table
+                                                                        System.out.println(seatTable.render());
+
                                                                         System.out.println();
-                                                                        //a
+                                                                        //for option book and back
                                                                         while (reuseAble) {
                                                                             System.out.println("\n[1]. Booking Ticket\t[2]. Back");
                                                                             input = sc.nextLine();
                                                                             if (input.matches("\\d+")) {
                                                                                 int optionCaseBooking = Integer.parseInt(input);
-                                                                                int count = 0;
                                                                                 boolean agin = true;
                                                                                 if (optionCaseBooking == 1) {
-                                                                                    checkifItEqualZero:
+
                                                                                     while (agin) {
                                                                                         System.out.print("\nChoose seat you want to Booking (e.g., 1,2,3,4..): ");
                                                                                         input = sc.nextLine();
-                                                                                        if (input.matches("^(\\d+\\s*,\\s*)*\\d+$")) {
+                                                                                        if (input.matches("^(?!.*\\b0\\b)\\s*([1-9]\\d*\\s*(,\\s*[1-9]\\d*)*)?\\s*$")) {
                                                                                             agin = false;
                                                                                             String[] numberStrings = input.split(",");
                                                                                             int[] numbers = new int[numberStrings.length];
                                                                                             for (int i = 0; i < numberStrings.length; i++) {
                                                                                                 numbers[i] = Integer.parseInt(numberStrings[i].trim());
-                                                                                                count += 1;
-                                                                                                if(numbers[i] == 0){
-                                                                                                    System.out.println("err");
-                                                                                                    break checkifItEqualZero;
-                                                                                                }
                                                                                             }
 
-//                                                                                          System.out.println(Arrays.toString(numbers));
-                                                                                            System.out.println(movieId);
                                                                                             bookedSeat:
                                                                                             if (numbers.length < cinmaStorage[movieId - 1].length) {
                                                                                                 for (int dataBook = 0; dataBook <= cinmaStorage[movieId - 1].length; dataBook += 1) {
@@ -222,7 +279,7 @@ public class CenimaValidate {
                                                                                                             if (cinmaStorage[movieId - 1][dataBook - 1] == dataTaken) {
                                                                                                                 System.out.println("The seat has been booked");
                                                                                                                 agin = true;
-                                                                                                                break  bookedSeat;
+                                                                                                                break bookedSeat;
                                                                                                             } else {
                                                                                                                 cinmaStorage[movieId - 1][dataBook - 1] = dataTaken;
                                                                                                             }
@@ -253,7 +310,6 @@ public class CenimaValidate {
                                                                 System.out.println(RED + "The hall is not yet upload movie" + RESET);
                                                                 break checkId;
                                                             }
-
                                                         } else {
                                                             System.out.println(RED + "The hall has only #" + cinmaStorage.length + ":))" + RESET);
                                                         }
@@ -263,22 +319,21 @@ public class CenimaValidate {
                                                 }
                                             }
                                             case 2 -> {
-                                                System.out.println("2");
+                                                System.out.println("2 First");
                                             }
                                             case 3 -> {
-                                                System.out.println("3");
+                                                System.out.println("3 Next");
                                             }
                                             case 4 -> {
-                                                System.out.println("4");
+                                                System.out.println("4 Prevous");
                                             }
                                             case 5 -> {
-                                                System.out.println("5");
+                                                System.out.println("5 Last");
                                             }
                                             case 6 -> {
                                                 System.out.println("Thank you so much");
-                                                break outerMenuOfBooking;
+                                                break outerLoop;
                                             }
-
                                             // Add cases for 2, 3, 4, 5, and 6 as needed
                                             default ->
                                                     System.out.println("Invalid option. Please choose a valid option (1-6).");
@@ -329,21 +384,85 @@ public class CenimaValidate {
                             System.out.println("============================");
                         }
                     }
-
                     if (!hasAnyBookings) {
                         System.out.println(RED + "No tickets have been booked yet." + RESET);
                     }
-
                     System.out.println("\nPress Enter to continue...");
                     sc.nextLine();
                 }
                 case 4 -> {
-                    for(int i =0; i < cinmaStorage.length; i+=1){
-                        for(int j =0; j<cinmaStorage[i].length; j+=1){
-                            cinmaStorage[i][j] = 0;
-                        }
+                    if (movieStorage[0][0] != null) {
+                        endLoop:
+                        do {
+                            System.out.print("Are you sure you want to reset " + GREEN + "HALL" + RESET + " (Y/N) : ");
+                            input = sc.nextLine();
+                            if (input.equalsIgnoreCase("y")) {
+                                for (int i = 0; i < cinmaStorage.length; i += 1) {
+                                    for (int j = 0; j < cinmaStorage[i].length; j += 1) {
+                                        cinmaStorage[i][j] = 0;
+                                    }
+                                }
+                                System.out.println(GREEN + "all hall is already reset" + RESET);
+                                System.out.println(GREEN + ">>>>>>>>>>>>>>> APPROVED <<<<<<<<<<<" + RESET);
+                                reuseAble = false;
+                                break endLoop;
+                            } else if (input.equalsIgnoreCase("n")) {
+                                System.out.println("your hall not yet reset Thank you");
+                                break endLoop;
+                            } else {
+                                System.out.println("Enter again please");
+                                reuseAble = true;
+                            }
+
+                        } while (reuseAble);
+                    } else {
+                        System.out.print(RED + "No movie yet." + RESET);
+                        System.out.println("\nPress Enter to continue...");
+                        sc.nextLine();
                     }
-                    System.out.println(GREEN + "all hall is already reset" + RESET);
+                }
+                case 5 -> {
+                    boolean checkingIsDegit = true;
+                    if (movieStorage[0][0] != null) {
+
+                        do {
+                            // Prompt the user to enter the number of rows to display
+                            System.out.print("Enter the number of rows to display (1, 2, etc.): ");
+                            input = sc.nextLine();
+                            if (input.matches("\\d+")) {
+                                optionSetRow = Integer.parseInt(input);
+                                if (optionSetRow > cinmaStorage.length || optionSetRow <= 0) {
+                                    System.out.println("The movie is only" + movieStorage.length);
+                                    System.out.println(RED + ">>>>>>>>>>>>>>> NOT APPROVED <<<<<<<<<<<" + RESET);
+                                    optionSetRow = -1;
+                                } else {
+                                    endLoop:
+                                    do {
+                                        System.out.print("Are you sure you want to reset (Y/N) : ");
+                                        input = sc.nextLine();
+                                        if (input.equalsIgnoreCase("y")) {
+                                            System.out.println(GREEN + ">>>>>>>>>>>>>>> APPROVED <<<<<<<<<<<" + RESET);
+                                            reuseAble = false;
+                                        } else if (input.equalsIgnoreCase("n")) {
+                                            System.out.println("Thank you");
+                                            optionSetRow = -1;
+                                            break endLoop;
+                                        } else {
+                                            System.out.println(RED + "Enter again please" + RESET);
+                                            reuseAble = true;
+                                        }
+                                    } while (reuseAble);
+                                }
+                                checkingIsDegit = false;
+                            } else {
+                                System.out.println(RED + "Enter again please" + RESET);
+                            }
+                        } while (checkingIsDegit);
+                    } else {
+                        System.out.print(RED + "No movie yet." + RESET);
+                        System.out.println("\nPress Enter to continue...");
+                        sc.nextLine();
+                    }
                 }
                 case 6 -> {
                     System.out.println("Thank you for using the system");
