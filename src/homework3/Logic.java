@@ -139,7 +139,7 @@ public class Logic extends Book {
     public void displayMenu() {
         boolean condition = true;
         do{
-            System.out.println("========= " + this.userName + " LIBRARY, " + this.libraryAddress + " =========");
+            System.out.println("========= " + userName + " LIBRARY, " + libraryAddress + " =========");
             System.out.println("1- Add Book");
             System.out.println("2- Show All Books");
             System.out.println("3- Show Available Books");

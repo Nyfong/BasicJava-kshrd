@@ -6,6 +6,8 @@ public class Main {
     public static void main(String[] args) {
         Logic obj = new Logic();
         System.out.println(obj);
+        obj.userName = "KDET";
+        obj.libraryAddress = "Battambang";
 //       // obj.setUpLibrary();
         obj.displayMenu();
     }
