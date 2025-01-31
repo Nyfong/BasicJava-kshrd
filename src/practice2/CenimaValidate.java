@@ -139,7 +139,7 @@ public class CenimaValidate {
                                 System.out.println("Display all movie");
                                 String[] headers = {"ID", "Movie", "Type", "Duration", "Hall", "Seat", "Available"};
                                 //pkert table rg
-                                Table table = new Table(headers.length, BorderStyle.CLASSIC, ShownBorders.ALL, false);
+                                Table table = new Table(headers.length, BorderStyle.UNICODE_BOX_DOUBLE_BORDER, ShownBorders.ALL, false);
                                 CellStyle cellStyle = new CellStyle(CellStyle.HorizontalAlign.center);
 
                                 //display header rg

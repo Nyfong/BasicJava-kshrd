@@ -1,5 +1,10 @@
 package homework3;
 
+import org.nocrala.tools.texttablefmt.BorderStyle;
+import org.nocrala.tools.texttablefmt.CellStyle;
+import org.nocrala.tools.texttablefmt.ShownBorders;
+import org.nocrala.tools.texttablefmt.Table;
+
 import java.util.Scanner;
 
 public class Logic extends Book {
@@ -10,6 +15,14 @@ public class Logic extends Book {
     public String input;
     public String GREEN = "\u001B[32m", RED = "\u001B[31m", RESET = "\u001B[30m";
     public boolean isValid = false; // Controls the loop
+    public String[][] books = {
+            {"The Art of War", "Sun Tzu", "500 BC", "Available"},
+            {"KDET PUMIND", "George Orwell", "1949", "NOT Available"},
+            {"To Kill a Mockingbird", "Harper Lee", "1960", "Available"},
+            {"Moby-Dick", "Herman Melville", "1851", "Available"},
+            {"The Catcher in the Rye", "J.D. Salinger", "1951", "Available"}
+    };
+    String[] headers = {"ID", "Book", "Author", "When","Available"};
 
     //method for setup Library
     public void setUpLibrary() {
@@ -117,14 +130,15 @@ public class Logic extends Book {
                 isValid = true;
             }
         }
+
         // Displaying Success Message
         System.out.println("Book is added successfully ✅");
-
-        sc.close();
+        System.out.println(">>>>>>>>>>> please press any key to continue <<<<<<<<<<");
     }
 
     public void displayMenu() {
-        while (!isValid) {
+        boolean condition = true;
+        do{
             System.out.println("========= " + this.userName + " LIBRARY, " + this.libraryAddress + " =========");
             System.out.println("1- Add Book");
             System.out.println("2- Show All Books");
@@ -137,12 +151,40 @@ public class Logic extends Book {
             input = sc.nextLine();
             if (input.matches("\\d+")) {
                 option = Integer.parseInt(input);
-                if (option == 1) {
-                    this.addBook();
-                    break;
-                } else System.out.println("End 200");
-            }
-        }
+                switch (option) {
+                    case 1 -> {
+                        this.addBook();
+                        sc.nextLine();
+                    }
+                    case 2 -> {
+                        Table table = new Table(headers.length, BorderStyle.UNICODE_BOX_DOUBLE_BORDER, ShownBorders.ALL, false);
+                        CellStyle cellStyle = new CellStyle(CellStyle.HorizontalAlign.center);
+                        //display header Books
+                        for (String header : headers) {
+                            table.addCell(header, cellStyle);
+                        }
+
+                       for(int i =0; i< books.length ; i+=1)
+                       {
+                           for(int j =0; j<books[i].length; j+=1)
+                           {
+                               table.addCell(""+(i+=1), cellStyle); // Type
+                               table.addCell(books[i][0], cellStyle); // Type
+                               table.addCell(books[i][1], cellStyle); // Type
+                               table.addCell(books[i][2], cellStyle); // Type
+                               table.addCell(books[i][3], cellStyle); // Type
+
+                           }
+                       }
+                        System.out.println(table.render());
+                        System.out.println(">>>>>>>>>>> please press any key to continue <<<<<<<<<<");
+                        sc.nextLine();
+                    }
+
+                    default -> System.out.println("End 200");
+                }
+            }else System.out.println(RED + "Invalid Only [ 1-6 ] are allowed." + RESET);
+        }while (condition);
     }
 
 }
