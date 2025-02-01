@@ -5,6 +5,7 @@ import org.nocrala.tools.texttablefmt.CellStyle;
 import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Logic extends Book {
@@ -15,14 +16,42 @@ public class Logic extends Book {
     public String input;
     public String GREEN = "\u001B[32m", RED = "\u001B[31m", RESET = "\u001B[30m";
     public boolean isValid = false; // Controls the loop
-    public String[][] books = {
-            {"The Art of War", "Sun Tzu", "500 BC", "Available"},
-            {"KDET PUMIND", "George Orwell", "1949", "NOT Available"},
-            {"To Kill a Mockingbird", "Harper Lee", "1960", "Available"},
-            {"Moby-Dick", "Herman Melville", "1851", "Available"},
-            {"The Catcher in the Rye", "J.D. Salinger", "1951", "Available"}
-    };
-    String[] headers = {"ID", "Book", "Author", "When","Available"};
+    public String[][] books = new String[50][];  // Initialize with 50 rows
+
+    {  // Initialization block
+        books[0] = new String[]{"The Art of War", "Sun Tzu", "500 BC", "Available"};
+        books[1] = new String[]{"KDET PUMIND", "George Orwell", "1949", "NOT Available"};
+        books[2] = new String[]{"To Kill a Mockingbird", "Harper Lee", "1960", "Available"};
+        books[3] = new String[]{"Moby-Dick", "Herman Melville", "1851", "Available"};
+        books[4] = new String[]{"The Catcher in the Rye", "J.D. Salinger", "1951", "Available"};
+    }
+
+    String[] headers = {"ID", "Book", "Author", "When", "Available"};
+
+    public void printBooks() {
+
+        Table table = new Table(headers.length, BorderStyle.UNICODE_BOX_DOUBLE_BORDER, ShownBorders.ALL, false);
+        CellStyle cellStyle = new CellStyle(CellStyle.HorizontalAlign.center);
+        for (String header : headers) {
+            table.addCell(header, cellStyle);
+        }
+        int i = 0;
+        int j =0;
+        int idCount =0;
+        for(i =0; i<books.length; i+=1){
+            if(books[i] != null){
+                table.addCell("" + (idCount+1), cellStyle); // Type
+                table.addCell(books[j][0], cellStyle); // Type
+                table.addCell(books[j][1], cellStyle); // Type
+                table.addCell(books[j][2], cellStyle); // Type
+                table.addCell(books[j][3], cellStyle); // Type
+            }
+            j+=1;
+            idCount+=1;
+        }
+
+        System.out.println(table.render());
+    }
 
     //method for setup Library
     public void setUpLibrary() {
@@ -51,26 +80,21 @@ public class Logic extends Book {
         System.out.println("Hello  \" " + GREEN + this.userName.toUpperCase() + RESET + " \" Library is already created in [ " + GREEN + this.libraryAddress.toUpperCase() + RESET + " ] address successfully");
     }
 
+
     public void addBook() {
-        int bookId;
+        int bookId =0;
         String bookName, authorName;
         Author auth = new Author();
         Scanner sc = new Scanner(System.in);  // Make sure to create a Scanner object
         System.out.println("========= ADD BOOK INFO =========");
         // Asking for Book ID
-        boolean isValid = false;
-        while (!isValid) {
-            System.out.print("=> Book ID : ");
-            String input = sc.nextLine();
-            if (!input.matches("\\d+")) {
-                System.out.println(RED + "Invalid bookID. Only digits are allowed." + RESET);
-            } else {
-                bookId = Integer.parseInt(input);
-                setId(bookId);  // Set book ID
-                System.out.println("The book ID is " + this.getId());
-                isValid = true;
+        for(int i =0; i<books.length; i+=1) {
+            if (books[i] != null) {
+              bookId += 1;
             }
         }
+        this.setId(bookId);
+        System.out.println("Book Id:" +getId());
         // Reset isValid for next loop
         isValid = false;
 
@@ -130,6 +154,18 @@ public class Logic extends Book {
                 isValid = true;
             }
         }
+        setStatus("Available");
+        System.out.println(this.getId());
+        if (this.getId() < books.length) { // Ensure index is within bounds
+            books[this.getId()] = new String[]{
+                    this.getTitle(),
+                    this.getAuthor().getName(),
+                    this.getPublishYear(),
+                    getStatus()
+            };
+        } else {
+            System.out.println("Error: Book ID is out of bounds!");
+        }
 
         // Displaying Success Message
         System.out.println("Book is added successfully ✅");
@@ -138,7 +174,8 @@ public class Logic extends Book {
 
     public void displayMenu() {
         boolean condition = true;
-        do{
+
+        do {
             System.out.println("========= " + userName + " LIBRARY, " + libraryAddress + " =========");
             System.out.println("1- Add Book");
             System.out.println("2- Show All Books");
@@ -157,34 +194,15 @@ public class Logic extends Book {
                         sc.nextLine();
                     }
                     case 2 -> {
-                        Table table = new Table(headers.length, BorderStyle.UNICODE_BOX_DOUBLE_BORDER, ShownBorders.ALL, false);
-                        CellStyle cellStyle = new CellStyle(CellStyle.HorizontalAlign.center);
-                        //display header Books
-                        for (String header : headers) {
-                            table.addCell(header, cellStyle);
-                        }
-
-                       for(int i =0; i< books.length ; i+=1)
-                       {
-                           for(int j =0; j<books[i].length; j+=1)
-                           {
-                               table.addCell(""+(i+=1), cellStyle); // Type
-                               table.addCell(books[i][0], cellStyle); // Type
-                               table.addCell(books[i][1], cellStyle); // Type
-                               table.addCell(books[i][2], cellStyle); // Type
-                               table.addCell(books[i][3], cellStyle); // Type
-
-                           }
-                       }
-                        System.out.println(table.render());
+                        printBooks();
                         System.out.println(">>>>>>>>>>> please press any key to continue <<<<<<<<<<");
                         sc.nextLine();
                     }
 
                     default -> System.out.println("End 200");
                 }
-            }else System.out.println(RED + "Invalid Only [ 1-6 ] are allowed." + RESET);
-        }while (condition);
+            } else System.out.println(RED + "Invalid Only [ 1-6 ] are allowed." + RESET);
+        } while (condition);
     }
 
 }
