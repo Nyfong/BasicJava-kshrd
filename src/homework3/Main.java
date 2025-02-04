@@ -1,13 +1,8 @@
 package homework3;
-
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
-        Control obj = new Control();
-        System.out.println(obj);
-        obj.displayMenu();
-
-
+        Book[] books = new Book[50]; // Array of Book objects
+        Logic logic = new Logic(books); // Pass the array to Logic
+        logic.displayMenu(); // Start the program
     }
 }

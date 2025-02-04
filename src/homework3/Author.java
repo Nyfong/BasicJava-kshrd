@@ -1,27 +1,37 @@
 package homework3;
 
 public class Author {
-    private   String name;
-    private String yearActive;
+    private String name;
+    private String yearsActive;
+
+    public Author(String name, String yearsActive) {
+        this.name = name;
+        this.yearsActive = yearsActive;
+    }
+
+    public Author() {
+
+    }
 
     public void setName(String name) {
         this.name = name;
     }
-
     public void setYearActive(String yearActive) {
-        this.yearActive = yearActive;
+        this.yearsActive = yearActive;
     }
-
     public String getName() {
         return name;
     }
 
-    public String getYearActive() {
-        return yearActive;
+    public String getYearsActive() {
+        return yearsActive;
     }
-    // Display author info
-    public void displayAuthorInfo() {
-        System.out.println("Author: " + this.name);
-        System.out.println("Active Years: " + this.yearActive);
+
+    @Override
+    public String toString() {
+        return name + " (" + yearsActive + ")";
     }
+
+
+
 }

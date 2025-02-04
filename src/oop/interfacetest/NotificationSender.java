@@ -1,8 +1,5 @@
 package oop.interfacetest;
 
-import javax.swing.text.StyleContext;
-import java.lang.annotation.Inherited;
-
 // Notification Interface (separate file - Notification.java)
 interface Notification {
     void send(String message, String recipient);
@@ -15,8 +12,6 @@ class EmailNotification implements Notification {
         System.out.println("Sending email to " + recipient + ": " + message);
         // Logic to send email (e.g., using an email library)
     }
-
-
 }
 
 // SMSNotification Class (separate file - SMSNotification.java)
@@ -26,10 +21,6 @@ class SMSNotification implements Notification {
         System.out.println("Sending SMS to " + recipient + ": " + message);
         // Logic to send SMS (e.g., using an SMS gateway)
     }
-}
-
-abstract class test implements Notification {
-
 }
 
 // NotificationSender Class (separate file - NotificationSender.java)
