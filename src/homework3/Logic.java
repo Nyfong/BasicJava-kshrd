@@ -20,6 +20,7 @@ public class Logic extends Book {
     public String GREEN = "\u001B[32m", RED = "\u001B[31m", RESET = "\u001B[30m";
     public boolean isValid = false; // Controls the loop
     public int indexSetRow = 0;
+    public int indexStart, indexStop = 0;
 
     public Logic(Book[] books) {
         super();
@@ -33,7 +34,6 @@ public class Logic extends Book {
         books[2] = new Book(3, "The Goldfinch", new Author("Donna Tartt", "1963-2000"), "2013", "a");
         books[3] = new Book(4, "The Testaments", new Author("Margaret Atwood", "1939-1999"), "2019", null);
     }
-
 
     String[] headers = {"ID", "Book", "Author", "When", "Available"};
 
@@ -62,29 +62,79 @@ public class Logic extends Book {
     }
 
     //for setRow by number
+    private int currentPage = 1;
+    private int rowsPerPage = 2;
+
     private void setRowByNumber(int rowNumber) {
-        System.out.println(rowNumber != 0 ? ("You haved show " + countNotNullStorage()) : ("You haved show " + rowNumber + "\t and Total row is :" + countNotNullStorage()));
+        System.out.println("Showing page " + currentPage + " of " + getTotalPages());
         Table table = new Table(headers.length, BorderStyle.UNICODE_BOX_DOUBLE_BORDER, ShownBorders.ALL, false);
         CellStyle cellStyle = new CellStyle(CellStyle.HorizontalAlign.center);
         for (String header : headers) {
             table.addCell(header, cellStyle);
         }
-        int i = 0;
-        int j = 0;
-        int idCount = 0;
-        for (i = 0; i < rowNumber; i += 1) {
-            if (books[i] != null) {
-                table.addCell((books[j].getStatus() == null ? (books[i].getId() + "") : ((books[j].getStatus().equalsIgnoreCase("REMOVE")) ? (RED + "REMOVE" + RESET) : (books[i].getId() + ""))), cellStyle); // Type
-                table.addCell(String.valueOf(books[j].getTitle()), cellStyle); // Type
-                table.addCell(books[j].getAuthor().getName() + "(" + books[j].getAuthor().getYearsActive() + ")", cellStyle); // Type
-                table.addCell(String.valueOf(books[j].getPublishYear()), cellStyle); // Type
-                table.addCell((books[j].getStatus() == null ? (GREEN + "Available" + RESET) : ((books[j].getStatus().equalsIgnoreCase("REMOVE")) ? (RED + "REMOVE" + RESET) : (RED + "Unavailable" + RESET))), cellStyle); // Type
-            }
-            j += 1;
-            idCount += 1;
 
+        int startIndex = (currentPage - 1) * rowNumber;
+        int j = 0;
+        if(indexSetRow >0){
+            for (int i = startIndex; j < indexSetRow && i < books.length; i++) {
+                if (books[i] != null) {
+                    table.addCell((books[j].getStatus() == null ? (books[i].getId() + "") : ((books[j].getStatus().equalsIgnoreCase("REMOVE")) ? (RED + "REMOVE" + RESET) : (books[i].getId() + ""))), cellStyle); // Type
+                    table.addCell(String.valueOf(books[j].getTitle()), cellStyle); // Type
+                    table.addCell(books[j].getAuthor().getName() + "(" + books[j].getAuthor().getYearsActive() + ")", cellStyle); // Type
+                    table.addCell(String.valueOf(books[j].getPublishYear()), cellStyle); // Type
+                    table.addCell((books[j].getStatus() == null ? (GREEN + "Available" + RESET) : ((books[j].getStatus().equalsIgnoreCase("REMOVE")) ? (RED + "REMOVE" + RESET) : (RED + "Unavailable" + RESET))), cellStyle);
+                    j += 1;
+                }
+            }
+        }
+       else{
+            for (int i = startIndex; j < rowNumber && i < books.length; i++) {
+                if (books[i] != null) {
+                    table.addCell((books[j].getStatus() == null ? (books[i].getId() + "") : ((books[j].getStatus().equalsIgnoreCase("REMOVE")) ? (RED + "REMOVE" + RESET) : (books[i].getId() + ""))), cellStyle); // Type
+                    table.addCell(String.valueOf(books[j].getTitle()), cellStyle); // Type
+                    table.addCell(books[j].getAuthor().getName() + "(" + books[j].getAuthor().getYearsActive() + ")", cellStyle); // Type
+                    table.addCell(String.valueOf(books[j].getPublishYear()), cellStyle); // Type
+                    table.addCell((books[j].getStatus() == null ? (GREEN + "Available" + RESET) : ((books[j].getStatus().equalsIgnoreCase("REMOVE")) ? (RED + "REMOVE" + RESET) : (RED + "Unavailable" + RESET))), cellStyle);
+                    j += 1;
+                }
+            }
         }
         System.out.println(table.render());
+    }
+
+    private int getTotalPages() {
+        return (int) Math.ceil((double) countNotNullStorage() / rowsPerPage);
+    }
+
+    private void printBooks() {
+        while (true) {
+            int totalPages = getTotalPages();
+            setRowByNumber(rowsPerPage);
+
+            System.out.println("1. Next Page\t2. Previous Page\t3. First Page\t4. Last Page\t5. Exit");
+            System.out.print("-> Enter an option for pagination: ");
+            String input = sc.nextLine();
+
+            if (input.matches("^[1-5]$")) {
+                int option = Integer.parseInt(input);
+                switch (option) {
+                    case 1:
+                        if (currentPage < totalPages) currentPage++;
+                        break;
+                    case 2:
+                        if (currentPage > 1) currentPage--;
+                        break;
+                    case 3:
+                        currentPage = 1;
+                        break;
+                    case 4:
+                        currentPage = totalPages;
+                        break;
+                    case 5:
+                        return;
+                }
+            }
+        }
     }
 
     //case 1
@@ -109,7 +159,7 @@ public class Logic extends Book {
         while (!isValid) {
             System.out.print("=> Book Name : ");
             String input = sc.nextLine();
-            if ( input.isBlank()) {
+            if (input.isBlank()) {
                 System.out.println(RED + "Book Name cannot be empty or contain only spaces." + RESET);
                 continue;
             }
@@ -133,7 +183,7 @@ public class Logic extends Book {
         while (!isValid) {
             System.out.print("=> Book Author : ");
             String input = sc.nextLine();
-            if ( input.isBlank()) {
+            if (input.isBlank()) {
                 System.out.println(RED + "Author Name cannot be empty or contain only spaces." + RESET);
                 continue;
             }
@@ -225,13 +275,7 @@ public class Logic extends Book {
         System.out.println(">>>>>>>>>>> please press any key to continue <<<<<<<<<<");
     }
 
-    //case 2
-    private void printBooks() {
-        if (indexSetRow > 0) {
-            setRowByNumber(indexSetRow);
-        } else setRowByNumber(books.length);
-        System.out.println("1. Next Page\t2. Previous Page\t\t3. First Page\t4. Last Page\t5. Exit");
-    }
+
 
     //case 3
     private void showavailableBook() {
@@ -549,8 +593,7 @@ public class Logic extends Book {
             libraryAddress = sc.nextLine();
             if (libraryAddress.isBlank()) {
                 System.out.println(RED + "Adress cannot be empty or contain only spaces." + RESET);
-            }
-            else if (!libraryAddress.matches("[a-zA-Z ]+")) { // Only allows letters
+            } else if (!libraryAddress.matches("[a-zA-Z ]+")) { // Only allows letters
                 System.out.println(RED + "Invalid address. Only letters are allowed." + RESET);
             } else {
                 isValid = true; // Exit loop
