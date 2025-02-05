@@ -1,4 +1,5 @@
 package homework3;
+
 import org.nocrala.tools.texttablefmt.BorderStyle;
 import org.nocrala.tools.texttablefmt.CellStyle;
 import org.nocrala.tools.texttablefmt.ShownBorders;
@@ -28,9 +29,9 @@ public class Logic extends Book {
 
     private void initializeBooks() {
         books[0] = new Book(1, "The Road", new Author("Cormac McCarthy", "1933-2023"), "2006", null);
-        books[1] = new Book(2, "The Night Watch", new Author("Sergei Lukyanenko", "1968-"), "1998", null);
-        books[2] = new Book(3, "The Goldfinch", new Author("Donna Tartt", "1963-"), "2013", "a");
-        books[3] = new Book(4, "The Testaments", new Author("Margaret Atwood", "1939-"), "2019", null);
+        books[1] = new Book(2, "The Night Watch", new Author("Sergei Lukyanenko", "1968-2002"), "1998", null);
+        books[2] = new Book(3, "The Goldfinch", new Author("Donna Tartt", "1963-2000"), "2013", "a");
+        books[3] = new Book(4, "The Testaments", new Author("Margaret Atwood", "1939-1999"), "2019", null);
     }
 
 
@@ -46,6 +47,7 @@ public class Logic extends Book {
         }
         return bookId;
     }
+
     //for helping insert auto Id
     private int countNotNullStorageAndGetId() {
         int bookId = 0;
@@ -61,6 +63,7 @@ public class Logic extends Book {
 
     //for setRow by number
     private void setRowByNumber(int rowNumber) {
+        System.out.println(rowNumber != 0 ? ("You haved show " + countNotNullStorage()) : ("You haved show " + rowNumber + "\t and Total row is :" + countNotNullStorage()));
         Table table = new Table(headers.length, BorderStyle.UNICODE_BOX_DOUBLE_BORDER, ShownBorders.ALL, false);
         CellStyle cellStyle = new CellStyle(CellStyle.HorizontalAlign.center);
         for (String header : headers) {
@@ -71,7 +74,7 @@ public class Logic extends Book {
         int idCount = 0;
         for (i = 0; i < rowNumber; i += 1) {
             if (books[i] != null) {
-                table.addCell((books[j].getStatus() == null ? (books[i].getId()+"") : ((books[j].getStatus().equalsIgnoreCase("REMOVE")) ? (RED + "REMOVE" + RESET) : (books[i].getId()+"") )), cellStyle); // Type
+                table.addCell((books[j].getStatus() == null ? (books[i].getId() + "") : ((books[j].getStatus().equalsIgnoreCase("REMOVE")) ? (RED + "REMOVE" + RESET) : (books[i].getId() + ""))), cellStyle); // Type
                 table.addCell(String.valueOf(books[j].getTitle()), cellStyle); // Type
                 table.addCell(books[j].getAuthor().getName() + "(" + books[j].getAuthor().getYearsActive() + ")", cellStyle); // Type
                 table.addCell(String.valueOf(books[j].getPublishYear()), cellStyle); // Type
@@ -83,7 +86,6 @@ public class Logic extends Book {
         }
         System.out.println(table.render());
     }
-
 
     //case 1
     private void addBook() {
@@ -100,13 +102,17 @@ public class Logic extends Book {
             return;
         }
         System.out.println("Current Book Id:" + (getId()));
-        System.out.println("last bookId was" + countNotNullStorageAndGetId());
+        System.out.println("last bookId was:" + countNotNullStorageAndGetId());
         // Reset isValid for next loop
         isValid = false;
         // Asking for Book Name
         while (!isValid) {
             System.out.print("=> Book Name : ");
             String input = sc.nextLine();
+            if ( input.isBlank()) {
+                System.out.println(RED + "Book Name cannot be empty or contain only spaces." + RESET);
+                continue;
+            }
             if (input.length() > 45) { // YYYY-YYYY = 9 characters
                 System.out.println(RED + "Invalid input: too long." + RESET);
                 continue;
@@ -127,6 +133,10 @@ public class Logic extends Book {
         while (!isValid) {
             System.out.print("=> Book Author : ");
             String input = sc.nextLine();
+            if ( input.isBlank()) {
+                System.out.println(RED + "Author Name cannot be empty or contain only spaces." + RESET);
+                continue;
+            }
             if (input.length() > 40) { // YYYY-YYYY = 9 characters
                 System.out.println(RED + "Invalid input: too long." + RESET);
                 continue;
@@ -199,7 +209,6 @@ public class Logic extends Book {
             isValid = true;
         }
         setStatus(null);
-        System.out.println(this.getId());
         if (this.getId() < books.length) { // Ensure index is within bounds
             books[countNotNullStorage()] = new Book(
                     this.getId(),                      // Assuming `getId()` gives a valid index
@@ -221,6 +230,7 @@ public class Logic extends Book {
         if (indexSetRow > 0) {
             setRowByNumber(indexSetRow);
         } else setRowByNumber(books.length);
+        System.out.println("1. Next Page\t2. Previous Page\t\t3. First Page\t4. Last Page\t5. Exit");
     }
 
     //case 3
@@ -473,16 +483,21 @@ public class Logic extends Book {
                         System.out.println(RED + "Already book" + RESET);
                         System.out.println(RED + "BookiD [" + removebookId + "] is Unaviable" + RESET);
                         System.out.println("");
-                        System.out.print("Do you want to remove again [Y / N ]? :");
-                        input = sc.nextLine();
-                        if (input.equalsIgnoreCase("y")) {
-                            isValid = false;
-                        } else if (input.equalsIgnoreCase("n")) {
-                            System.out.println(GREEN + "Thank you :)" + RESET);
-                            isValid = true;
-                            return;
-                        } else {
-                            isValid = false;
+                        boolean condi = true;
+                        while (condi) {
+                            System.out.print("Do you want to remove again [Y / N ]? :");
+                            input = sc.nextLine();
+                            if (input.equalsIgnoreCase("y")) {
+                                isValid = false;
+                                condi = false;
+                            } else if (input.equalsIgnoreCase("n")) {
+                                System.out.println(GREEN + "Thank you :)" + RESET);
+                                isValid = true;
+                                return;
+                            } else {
+                                System.out.println(GREEN + "Enter only  Y or N :)" + RESET);
+                                isValid = false;
+                            }
                         }
                     } else {
                         int i = 0;
@@ -519,7 +534,9 @@ public class Logic extends Book {
         while (!isValid) {
             System.out.print("Enter Library's Name: ");
             userName = sc.nextLine();
-            if (!userName.matches("[a-zA-Z ]+")) { // Only allows letters
+            if (userName.isBlank()) {
+                System.out.println(RED + "Name cannot be empty or contain only spaces." + RESET);
+            } else if (!userName.matches("[a-zA-Z ]+")) { // Only allows letters
                 System.out.println("Invalid username. Only letters are allowed.");
             } else {
                 isValid = true; // Exit loop
@@ -530,7 +547,10 @@ public class Logic extends Book {
         while (!isValid) {
             System.out.print("Enter Library's Address: ");
             libraryAddress = sc.nextLine();
-            if (!libraryAddress.matches("[a-zA-Z ]+")) { // Only allows letters
+            if (libraryAddress.isBlank()) {
+                System.out.println(RED + "Adress cannot be empty or contain only spaces." + RESET);
+            }
+            else if (!libraryAddress.matches("[a-zA-Z ]+")) { // Only allows letters
                 System.out.println(RED + "Invalid address. Only letters are allowed." + RESET);
             } else {
                 isValid = true; // Exit loop
@@ -598,5 +618,4 @@ public class Logic extends Book {
             } else System.out.println(RED + "Invalid Only degit are allowed." + RESET);
         } while (condition);
     }
-
 }
