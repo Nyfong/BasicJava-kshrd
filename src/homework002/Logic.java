@@ -105,8 +105,8 @@ public class Logic {
     // Helper method to choose account type
     private void choseTheSavingOrCheckingAccount(int typeOfOps) {
         System.out.println(GREEN + ">>>>>>>>>>>>>>>>>>>> " + RESET + typeOfMthodCase[typeOfOps] + GREEN + " <<<<<<<<<<<<<<<<<<<<" + RESET);
-        System.out.println((typeOfOps == 3)?("1. Checking Account ->  Saving Account"):("1. Checking Account"));
-        System.out.println((typeOfOps == 3)?("2. Saving Account ->  Checking Account "):("2. Saving Account"));
+        System.out.println((typeOfOps == 3) ? ("1. Checking Account ->  Saving Account") : ("1. Checking Account"));
+        System.out.println((typeOfOps == 3) ? ("2. Saving Account ->  Checking Account ") : ("2. Saving Account"));
         System.out.println("3. Back");
         System.out.println("========================================");
     }
@@ -114,21 +114,28 @@ public class Logic {
     // Case 1: Display options for creating an account
     private void displayOptionInCaseforCreate() {
         choseTheSavingOrCheckingAccount(0);
+        boolean validInput = false; // Flag to check if input is valid
+
         System.out.println("What type of account do you want to create?");
-        System.out.print("Enter your choice: ");
-        input = sc.nextLine();
-        if (input.matches("^[1-3]$")) {
-            option = Integer.parseInt(input);
-            if (option == 1) {
-                createAccount("Checking account");
-            } else if (option == 2) {
-                createAccount("Saving account");
+
+        // Keep prompting for input until valid
+        while (!validInput) {
+            System.out.print("Enter your choice: ");
+            input = sc.nextLine();
+
+            if (input.matches("^[1-3]$")) {
+                option = Integer.parseInt(input);
+                if (option == 1) {
+                    createAccount("Checking account");
+                } else if (option == 2) {
+                    createAccount("Saving account");
+                } else {
+                    System.out.println("Thank you so much for using it.");
+                }
+                validInput = true; // Valid input, exit the loop
             } else {
-                System.out.println("Thank you so much for using it.");
+                System.out.println(RED + "Invalid input! Only digits are allowed (1-3)." + RESET);
             }
-        } else {
-            System.out.println(RED + "Invalid input! Only digits are allowed (1-3)." + RESET);
-            condition = false;
         }
     }
 
@@ -296,7 +303,7 @@ public class Logic {
         } else {
             // Display checking account info if it exists
             if (checkingAccount.getAccountNumber() != null) {
-               // System.out.println("========= Checking Account Information =========");
+                // System.out.println("========= Checking Account Information =========");
                 checkingAccount.displayAccountInfo();
             } else {
                 System.out.println(RED + "No Checking Account found." + RESET);
@@ -369,7 +376,7 @@ public class Logic {
                     case 3 -> withDrawMoney();
                     case 4 -> transfer();
                     case 5 -> displayAccountCase5();
-                    case 6->{
+                    case 6 -> {
                         deleteAccount();
                     }
                     case 7 -> {
