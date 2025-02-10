@@ -1,6 +1,5 @@
 package homework002;
 
-import javax.print.DocFlavor;
 import java.util.Scanner;
 
 public class Logic {
@@ -16,14 +15,13 @@ public class Logic {
 
     // Constructor to initialize objects
     public Logic() {
-        this.checkingAccount = new CheckingAccount(); //  Initialize
+        this.checkingAccount = new CheckingAccount(); // Initialize
         this.savingAccount = new SavingAccount();
         this.sc = new Scanner(System.in);
     }
 
-    //case 1
+    // Case 1: Create Account
     private void createAccount(String typeOfAcc) {
-
         if (typeOfAcc.equalsIgnoreCase("Checking account") ? checkingAccount.getUserName() == null : savingAccount.getUserName() == null) {
             System.out.println(">>>>>>>>>>>>>>>>>>>> " + typeOfAcc + " Information <<<<<<<<<<<<<<<<<<<<");
             // Validate Username (only letters and spaces)
@@ -100,22 +98,23 @@ public class Logic {
             System.out.println("Gender: " + (typeOfAcc.equalsIgnoreCase("Saving account") ? savingAccount.getGender() : typeOfAcc.equalsIgnoreCase("Checking account") ? checkingAccount.getGender() : ""));
             System.out.println("Phone Number: " + (typeOfAcc.equalsIgnoreCase("Saving account") ? savingAccount.getPhoneNumber() : typeOfAcc.equalsIgnoreCase("Checking account") ? checkingAccount.getPhoneNumber() : ""));
         } else {
-            System.out.println(RED + "the account is already created" + RESET);
+            System.out.println(RED + "The account is already created" + RESET);
         }
     }
 
+    // Helper method to choose account type
     private void choseTheSavingOrCheckingAccount(int typeOfOps) {
         System.out.println(GREEN + ">>>>>>>>>>>>>>>>>>>> " + RESET + typeOfMthodCase[typeOfOps] + GREEN + " <<<<<<<<<<<<<<<<<<<<" + RESET);
-        System.out.println("1. Checking Account");
-        System.out.println("2. Saving Account");
+        System.out.println((typeOfOps == 3)?("1. Checking Account ->  Saving Account"):("1. Checking Account"));
+        System.out.println((typeOfOps == 3)?("2. Saving Account ->  Checking Account "):("2. Saving Account"));
         System.out.println("3. Back");
         System.out.println("========================================");
     }
 
-    //display
+    // Case 1: Display options for creating an account
     private void displayOptionInCaseforCreate() {
         choseTheSavingOrCheckingAccount(0);
-        System.out.println("What type of account do you want to create ?");
+        System.out.println("What type of account do you want to create?");
         System.out.print("Enter your choice: ");
         input = sc.nextLine();
         if (input.matches("^[1-3]$")) {
@@ -125,80 +124,15 @@ public class Logic {
             } else if (option == 2) {
                 createAccount("Saving account");
             } else {
-                System.out.println("Thank you so much for using it. ");
+                System.out.println("Thank you so much for using it.");
             }
         } else {
-            System.out.println(RED + "Invalid Only degit are allowed. and 1 to 3" + RESET);
+            System.out.println(RED + "Invalid input! Only digits are allowed (1-3)." + RESET);
             condition = false;
         }
-
-
     }
 
-    //case 2 non rate or checking account
-    private void logicDepositNoneRate() {
-        System.out.print("Enter the money to deposit:");
-        input = sc.nextLine();
-        double moneyPlus = 0;
-        // number and greater than 0
-        if (input.matches("\\d+") && Integer.parseInt(input) > 0) {
-            // Parse the input as a double and set the balance
-            checkingAccount.deposit(Integer.parseInt(input));
-            checkingAccount.setBalance(Integer.parseInt(input));
-            System.out.println("Checking Account");
-            System.out.println("==============================================================");
-            System.out.println("Deposit successful!");
-        } else {
-            System.out.println("Invalid input! Please enter a positive number greater than 0.");
-        }
-    }
-
-    // case 2 with rate or savingAccount
-    private void logicDepositWithRate() {
-        System.out.print("Enter the money to deposit:");
-        input = sc.nextLine();
-        double moneyPlus = 0;
-        // number and greater than 0
-        if (input.matches("\\d+") && Integer.parseInt(input) > 0 && Integer.parseInt(input) < 200) {
-            // Parse the input as a double and set the balance
-            savingAccount.deposit(Integer.parseInt(input));
-            savingAccount.setBalance(Integer.parseInt(input));
-            System.out.println("Checking Account");
-            System.out.println("==============================================================");
-            System.out.println("Deposit successful!");
-        } else if (input.matches("\\d+") && Integer.parseInt(input) > 0 && Integer.parseInt(input) == 200) {
-            savingAccount.deposit(Integer.parseInt(input));
-            savingAccount.setBalance(Integer.parseInt(input));
-            System.out.println("Checking Account");
-            System.out.println("========================== plus iterest of 5% ====================================");
-            System.out.println("Deposit successful!");
-        } else {
-            System.out.println("Invalid input! Please enter a positive number greater than 0.");
-        }
-    }
-
-    //case 3 withdraw with the checking account
-    private void withdrawMoneyWithoutRate() {
-        System.out.print("Enter the money to withdraw:");
-        input = sc.nextLine();
-        double moneyPlus = 0;
-        // number and greater than 0
-        if (input.matches("\\d+") && Integer.parseInt(input) > 0) {
-            // Parse the input as a double and set the balance
-            moneyPlus += checkingAccount.getBalance() + Double.parseDouble(input);
-            checkingAccount.setBalance(moneyPlus);
-            System.out.println("Checking Account");
-            System.out.println("Received : $ " + input);
-            System.out.println("Total Amount: $ " + checkingAccount.getBalance());
-            System.out.println("==============================================================");
-            System.out.println("Deposit successful!");
-        } else {
-            System.out.println("Invalid input! Please enter a positive number greater than 0. money can be 0");
-        }
-    }
-
-
-    //case 2
+    // Case 2: Deposit money into an account
     private void depositMoney() {
         choseTheSavingOrCheckingAccount(1);
         System.out.print("Enter your choice: ");
@@ -207,27 +141,52 @@ public class Logic {
             option = Integer.parseInt(input);
             if (option == 1) {
                 if (checkingAccount.getUserName() == null) {
-                    System.out.println(RED + "please create account first" + RESET);
+                    System.out.println(RED + "Please create an account first." + RESET);
                 } else {
                     logicDepositNoneRate();
                 }
-
             } else if (option == 2) {
                 if (savingAccount.getUserName() == null) {
-                    System.out.println(RED + "please create account first" + RESET);
+                    System.out.println(RED + "Please create an account first." + RESET);
                 } else {
                     logicDepositWithRate();
                 }
             } else {
-                System.out.println("Thank you so much for using it. ");
+                System.out.println("Thank you so much for using it.");
             }
         } else {
-            System.out.println(RED + "Invalid Only degit are allowed. and 1 to 3" + RESET);
+            System.out.println(RED + "Invalid input! Only digits are allowed (1-3)." + RESET);
             condition = false;
         }
     }
 
-    //case 3
+    // Deposit logic for Checking Account
+    private void logicDepositNoneRate() {
+        System.out.print("Enter the money to deposit: ");
+        input = sc.nextLine();
+        if (input.matches("\\d+") && Integer.parseInt(input) > 0) {
+            checkingAccount.deposit(Integer.parseInt(input));
+            System.out.println("==============================================================");
+            System.out.println("Deposit successful!");
+        } else {
+            System.out.println("Invalid input! Please enter a positive number greater than 0.");
+        }
+    }
+
+    // Deposit logic for Saving Account
+    private void logicDepositWithRate() {
+        System.out.print("Enter the money to deposit: ");
+        input = sc.nextLine();
+        if (input.matches("\\d+") && Integer.parseInt(input) > 0) {
+            savingAccount.deposit(Integer.parseInt(input));
+            System.out.println("==============================================================");
+            System.out.println("Deposit successful!");
+        } else {
+            System.out.println("Invalid input! Please enter a positive number greater than 0.");
+        }
+    }
+
+    // Case 3: Withdraw money from an account
     private void withDrawMoney() {
         choseTheSavingOrCheckingAccount(2);
         System.out.print("Enter your choice: ");
@@ -236,51 +195,159 @@ public class Logic {
             option = Integer.parseInt(input);
             if (option == 1) {
                 if (checkingAccount.getUserName() == null) {
-                    System.out.println(RED + "please create account first" + RESET);
+                    System.out.println(RED + "Please create an account first." + RESET);
                 } else {
                     withdrawMoneyWithoutRate();
                 }
-
             } else if (option == 2) {
                 if (savingAccount.getUserName() == null) {
-                    System.out.println(RED + "please create account first" + RESET);
+                    System.out.println(RED + "Please create an account first." + RESET);
                 } else {
-                    logicDepositWithRate();
+                    withdrawMoneyWithRate();
                 }
             } else {
-                System.out.println("Thank you so much for using it. ");
+                System.out.println("Thank you so much for using it.");
             }
         } else {
-            System.out.println(RED + "Invalid Only degit are allowed. and 1 to 3" + RESET);
+            System.out.println(RED + "Invalid input! Only digits are allowed (1-3)." + RESET);
             condition = false;
         }
     }
 
-    //case 5
-    private void displayAccountCase5() {
-        if (checkingAccount.getAccountNumber() == null && savingAccount.getAccountNumber() == null) {
-            System.out.println(RED + "========= please create the account first =========" + RESET);
+    // Withdraw logic for Checking Account
+    private void withdrawMoneyWithoutRate() {
+        System.out.print("Enter the money to withdraw: ");
+        input = sc.nextLine();
+        if (input.matches("\\d+") && Integer.parseInt(input) > 0) {
+            checkingAccount.withdraw(Integer.parseInt(input));
+            System.out.println("==============================================================");
         } else {
-            choseTheSavingOrCheckingAccount(4);
-            System.out.print("Enter your choice: ");
-            input = sc.nextLine();
-            if (input.matches("^[1-3]$")) {
-                option = Integer.parseInt(input);
-                if (option == 1) {
-                    checkingAccount.displayAccountInfo();
-                } else if (option == 2) {
-                    savingAccount.displayAccountInfo();
-                } else {
-                    System.out.println("Thank you so much for using it. ");
-                }
-            } else {
-                System.out.println(RED + "Invalid Only degit are allowed. and 1 to 3" + RESET);
-                condition = false;
-            }
+            System.out.println("Invalid input! Please enter a positive number greater than 0.");
         }
     }
 
-    //main case
+    // Withdraw logic for Saving Account
+    private void withdrawMoneyWithRate() {
+        System.out.print("Enter the money to withdraw: ");
+        input = sc.nextLine();
+        if (input.matches("\\d+") && Integer.parseInt(input) > 0) {
+            savingAccount.withdraw(Integer.parseInt(input));
+            System.out.println("==============================================================");
+
+        } else {
+            System.out.println("Invalid input! Please enter a positive number greater than 0.");
+        }
+    }
+
+    // Case 4: Transfer money between accounts
+    // Case 4: Transfer money between accounts
+    private void transfer() {
+        choseTheSavingOrCheckingAccount(3);
+        System.out.print("Enter your choice: ");
+        input = sc.nextLine();
+        if (input.matches("^[1-3]$")) {
+            option = Integer.parseInt(input);
+            if (option == 1) {
+                // Transfer from Checking to Saving
+                if (checkingAccount.getUserName() == null) {
+                    System.out.println(RED + "Please create a Checking Account first." + RESET);
+                } else if (savingAccount.getUserName() == null) {
+                    System.out.println(RED + "Please create a Saving Account first." + RESET);
+                } else {
+                    System.out.print("Enter the amount to transfer: ");
+                    input = sc.nextLine();
+                    if (input.matches("\\d+") && Integer.parseInt(input) > 0) {
+                        int amount = Integer.parseInt(input);
+                        checkingAccount.transfer(amount, savingAccount);
+                    } else {
+                        System.out.println("Invalid input! Please enter a positive number greater than 0.");
+                    }
+                }
+            } else if (option == 2) {
+                // Transfer from Saving to Checking
+                if (savingAccount.getUserName() == null) {
+                    System.out.println(RED + "Please create a Saving Account first." + RESET);
+                } else if (checkingAccount.getUserName() == null) {
+                    System.out.println(RED + "Please create a Checking Account first." + RESET);
+                } else {
+                    System.out.print("Enter the amount to transfer: ");
+                    input = sc.nextLine();
+                    if (input.matches("\\d+") && Integer.parseInt(input) > 0) {
+                        int amount = Integer.parseInt(input);
+                        savingAccount.transfer(amount, checkingAccount);
+                    } else {
+                        System.out.println("Invalid input! Please enter a positive number greater than 0.");
+                    }
+                }
+            } else {
+                System.out.println("Thank you so much for using it.");
+            }
+        } else {
+            System.out.println(RED + "Invalid input! Only digits are allowed (1-3)." + RESET);
+            condition = false;
+        }
+    }
+
+
+    // Case 5: Display account information
+    private void displayAccountCase5() {
+        if (checkingAccount.getAccountNumber() == null && savingAccount.getAccountNumber() == null) {
+            System.out.println(RED + "========= Please create an account first =========" + RESET);
+        } else {
+            // Display checking account info if it exists
+            if (checkingAccount.getAccountNumber() != null) {
+               // System.out.println("========= Checking Account Information =========");
+                checkingAccount.displayAccountInfo();
+            } else {
+                System.out.println(RED + "No Checking Account found." + RESET);
+            }
+
+            // Display saving account info if it exists
+            if (savingAccount.getAccountNumber() != null) {
+                //System.out.println("========= Saving Account Information =========");
+                savingAccount.displayAccountInfo();
+            } else {
+                System.out.println(RED + "No Saving Account found." + RESET);
+            }
+
+            // Optional: Add a closing message or additional information
+            System.out.println("Thank you so much for using it.");
+        }
+    }
+
+
+    private void deleteAccount() {
+        choseTheSavingOrCheckingAccount(5);
+        System.out.print("Enter your choice: ");
+        input = sc.nextLine();
+        if (input.matches("^[1-3]$")) {
+            option = Integer.parseInt(input);
+            if (option == 1) {
+                if (checkingAccount.getUserName() == null) {
+                    System.out.println(RED + "No Checking Account exists to delete." + RESET);
+                } else {
+                    checkingAccount = new CheckingAccount();
+                    System.out.println("==============================================================");
+                    System.out.println("Checking Account has been deleted successfully!");
+                }
+            } else if (option == 2) {
+                if (savingAccount.getUserName() == null) {
+                    System.out.println(RED + "No Saving Account exists to delete." + RESET);
+                } else {
+                    savingAccount = new SavingAccount();
+                    System.out.println("==============================================================");
+                    System.out.println("Saving Account has been deleted successfully!");
+                }
+            } else {
+                System.out.println("Thank you so much for using it.");
+            }
+        } else {
+            System.out.println(RED + "Invalid input! Only digits are allowed (1-3)." + RESET);
+            condition = false;
+        }
+    }
+
+    // Main menu
     public void displayMenu() {
         do {
             System.out.println("================== Online Banking System ==================");
@@ -297,34 +364,25 @@ public class Logic {
             if (input.matches("^[1-7]\\d*$")) {
                 option = Integer.parseInt(input);
                 switch (option) {
-                    case 1 -> {
-                        displayOptionInCaseforCreate();
+                    case 1 -> displayOptionInCaseforCreate();
+                    case 2 -> depositMoney();
+                    case 3 -> withDrawMoney();
+                    case 4 -> transfer();
+                    case 5 -> displayAccountCase5();
+                    case 6->{
+                        deleteAccount();
                     }
-                    case 2 -> {
-                        depositMoney();
-                    }
-
-                    case 5 -> {
-                        displayAccountCase5();
-                    }
-
                     case 7 -> {
-                        System.out.println("Thnak you for using this");
+                        System.out.println("Thank you for using this system.");
                         System.exit(0);
                     }
-                    default -> {
-                        System.out.println("Please enter only 1 to 7");
-                    }
-
+                    default -> System.out.println("Please enter only 1 to 7.");
                 }
                 condition = false;
-
             } else {
-                System.out.println(RED + "Invalid Only degit are allowed. and 1 to 7" + RESET);
+                System.out.println(RED + "Invalid input! Only digits are allowed (1-7)." + RESET);
                 condition = false;
             }
         } while (!condition);
-
-
     }
 }

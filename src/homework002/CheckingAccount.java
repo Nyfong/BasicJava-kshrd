@@ -56,23 +56,50 @@ public class CheckingAccount implements Account {
         this.balance = balance;
     }
 
-   // Deposit method
+    // Deposit method
     @Override
     public void deposit(double amount) {
+        if (amount <= 0) {
+            System.out.println("Deposit amount must be positive.");
+            return;
+        }
         double newBalance = getBalance() + amount; // Add deposit to current balance
         setBalance(newBalance); // Update the balance
         System.out.println("New balance after deposit: " + newBalance); // Display updated balance
     }
 
-
+    // Withdraw method
     @Override
     public void withdraw(double amount) {
-
+        if (amount <= 0) {
+            System.out.println("Withdrawal amount must be positive.");
+            return;
+        }
+        if (amount > getBalance()) {
+            System.out.println("Insufficient funds. Cannot withdraw " + amount + "$.");
+            return;
+        }
+        double newBalance = getBalance() - amount; // Subtract withdrawal from current balance
+        setBalance(newBalance); // Update the balance
+        System.out.println("New balance after withdrawal: " + newBalance); // Display updated balance
     }
 
+    // Transfer method
     @Override
     public void transfer(double amount, Account targetAccount) {
-
+        if (amount <= 0) {
+            System.out.println("Transfer amount must be positive.");
+            return;
+        }
+        if (amount > getBalance()) {
+            System.out.println("Insufficient funds. Cannot transfer " + amount + "$.");
+            return;
+        }
+        // Withdraw from this account
+        withdraw(amount);
+        // Deposit into the target account
+        targetAccount.deposit(amount);
+        System.out.println("Transfer of " + amount + "$ to account " + ((CheckingAccount) targetAccount).getAccountNumber() + " completed.");
     }
 
     @Override
@@ -84,7 +111,6 @@ public class CheckingAccount implements Account {
         System.out.println("Date of Birth: " + (this.dateOfBirth == null ? "not yet created an account" : this.dateOfBirth));
         System.out.println("Gender: " + (this.gender == ' ' ? "not yet created an account" : this.gender));
         System.out.println("Phone Number:" + (this.phoneNumber == null ? "not yet created an account" : this.phoneNumber));
-        System.out.println("Balance: " + this.balance + "$");
+        System.out.println("Balance: " + getBalance() + "$");
     }
-
 }
