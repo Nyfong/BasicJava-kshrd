@@ -56,10 +56,14 @@ public class CheckingAccount implements Account {
         this.balance = balance;
     }
 
+   // Deposit method
     @Override
     public void deposit(double amount) {
-
+        double newBalance = getBalance() + amount; // Add deposit to current balance
+        setBalance(newBalance); // Update the balance
+        System.out.println("New balance after deposit: " + newBalance); // Display updated balance
     }
+
 
     @Override
     public void withdraw(double amount) {

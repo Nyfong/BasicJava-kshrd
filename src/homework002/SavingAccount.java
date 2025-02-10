@@ -1,5 +1,7 @@
 package homework002;
 
+import java.util.Scanner;
+
 public class SavingAccount extends CheckingAccount implements Account {
     private String accountNumber;
     private String userName;
@@ -7,7 +9,8 @@ public class SavingAccount extends CheckingAccount implements Account {
     private char gender;
     private String phoneNumber;
     private double balance = 0;
-    private double saving = 0.5;
+    private double saving = 0.05;
+    Scanner sc = new Scanner(System.in);
 
     @Override
     public void displayAccountInfo() {
@@ -35,8 +38,23 @@ public class SavingAccount extends CheckingAccount implements Account {
 
     @Override
     public void deposit(double amount) {
+        double currentBalance = getBalance(); // Get the current balance from getter
+        System.out.println("Current balance before deposit: " + currentBalance); // Debugging line
 
+        double newBalance;
+
+        if (amount >= 200) {
+            double interest = amount * saving; // 5% interest
+            newBalance = currentBalance + amount + interest; // Add deposit and interest to balance
+            System.out.println("New balance after deposit and interest: " + newBalance); // Debugging line
+        } else {
+            newBalance = currentBalance + amount; // add deposit to balance
+            System.out.println("New balance after deposit: " + newBalance);
+        }
+
+        setBalance(newBalance); // Update balance via setter
     }
+
 
     public String getAccountNumber() {
         return accountNumber;
