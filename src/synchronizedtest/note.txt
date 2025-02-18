@@ -1,0 +1,87 @@
+
+============================================
+public synchronized void increment() {
+    count++;
+}
+
+The increment method is synchronized, meaning that only one thread at a time can execute it on a given Counter object.
+This prevents race conditions when multiple threads try to modify count simultaneously.
+
+============================================
+public int getCount() {
+    return count;
+}
+A public method to retrieve the current value of count.
+============================================
+1. Creating the Counter Object
+
+Counter counter = new Counter();
+
+A single Counter object is created.
+
+============================================
+2. Creating Threads
+
+Thread t1 = new Thread(() -> counter.increment());
+Thread t2 = new Thread(() -> counter.increment());
+
+
+Two threads (t1 and t2) are created.
+Each thread calls the increment() method of the Counter object.
+
+============================================
+3. Starting the Threads
+
+t1.start();
+t2.start();
+
+Both threads are started, meaning they will run concurrently.
+
+============================================
+4. Waiting for Threads to Finish
+
+try {
+    t1.join();
+    t2.join();
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+
+join() ensures that the main thread waits for t1 and t2 to finish before proceeding.
+
+============================================
+5. Printing the Final Count
+
+System.out.println("Final count: " + counter.getCount());
+
+After both threads complete, the final value of count is printed.
+============================================
+
+Thread Safety
+Why Use synchronized?
+
+If two threads call increment() at the same time, they might read and update count simultaneously, leading to race conditions.
+The synchronized keyword ensures that only one thread modifies count at a time.
+Guaranteed Output:
+
+Since increment() is synchronized, count will always be 2 after both threads finish.
+
+============================================
+Final count: 2
+
+Both t1 and t2 increment the counter once, resulting in count = 2.
+
+============================================
+What If synchronized Was Removed?
+Without synchronized, the output might still be 2, but in some cases (due to race conditions), it could be 1, because:
+
+Both threads could read count = 0 at the same time.
+They both increment it separately but write 1 instead of 2.
+This is known as a race condition, and it’s prevented by using synchronization.
+============================================
+Key Takeaways
+✅ synchronized prevents race conditions.
+✅ Ensures only one thread modifies count at a time.
+✅ Without synchronization, output might not be reliable.
+✅ Using join() ensures main waits for threads to finish.
+
