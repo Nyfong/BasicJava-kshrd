@@ -1,28 +1,43 @@
 package assginment2;
-
-public class SalariedEmployee extends  StaffMember {
+public class SalariedEmployee extends StaffMember {
     private double bonus;
     private double salary;
 
-    public SalariedEmployee(int id, String name, String address, double salary, double bonus) {
-        super(id, name, address);
+    public SalariedEmployee(String name, String address, double salary, double bonus) {
+        super(name, address); // Auto-increment id is handled in the parent class
         this.salary = salary;
         this.bonus = bonus;
     }
 
-    public double pay(){
-        System.out.println("Pay in SalariedEmployee");
-        return 1;
+    public void setBonus(double bonus) {
+        this.bonus = bonus;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public double getBonus() {
+        return bonus;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    @Override
+    public double pay() {
+        return salary + bonus;
     }
 
     @Override
     public String toString() {
-        return "HourlySalaryEmployee{" +
-                "bonus=" + bonus +
-                ", salary=" + salary +
-                ", id=" + id +
+        return "SalariedEmployee{" +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
+                ", salary=" + salary +
+                ", bonus=" + bonus +
                 '}';
     }
 }

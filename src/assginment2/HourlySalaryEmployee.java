@@ -1,28 +1,45 @@
 package assginment2;
 
-public class HourlySalaryEmployee  extends  StaffMember{
-    private int hourWorked;
+
+public class HourlySalaryEmployee extends StaffMember {
+    private int hoursWorked;
     private double rate;
 
-    public HourlySalaryEmployee(int id, String name, String address,int hourWorked, double rate) {
-        super(id, name, address);
-        this.hourWorked = hourWorked;
+    public HourlySalaryEmployee(String name, String address, int hoursWorked, double rate) {
+        super(name, address); // Auto-increment id is handled in the parent class
+        this.hoursWorked = hoursWorked;
         this.rate = rate;
     }
 
-    public double pay(){
-        System.out.println("Pay in HourlySalaryEmployee");
-        return 1;
+    public void setHoursWorked(int hoursWorked) {
+        this.hoursWorked = hoursWorked;
+    }
+
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
+    @Override
+    public double pay() {
+        return hoursWorked * rate;
+    }
+
+    public int getHoursWorked() {
+        return hoursWorked;
+    }
+
+    public double getRate() {
+        return rate;
     }
 
     @Override
     public String toString() {
         return "HourlySalaryEmployee{" +
-                "hourWorked=" + hourWorked +
-                ", rate=" + rate +
-                ", id=" + id +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
+                ", hoursWorked=" + hoursWorked +
+                ", rate=" + rate +
                 '}';
     }
 }
