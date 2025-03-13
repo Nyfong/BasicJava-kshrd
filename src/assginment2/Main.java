@@ -1,8 +1,7 @@
 package assginment2;
 
-
-
 import org.nocrala.tools.texttablefmt.BorderStyle;
+import org.nocrala.tools.texttablefmt.CellStyle;
 import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
 
@@ -11,20 +10,28 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+// Define menu option constants
 
 public class Main {
+    private static final String INSERT_EMPLOYEE = "1";
+    private static final String DISPLAY_EMPLOYEES = "2";
+    private static final String UPDATE_EMPLOYEE = "3";
+    private static final String REMOVE_EMPLOYEE = "4";
+    private static final String EXIT = "5";
     private static List<StaffMember> employees = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         mockData();
         while (true) {
-            System.out.println("\n--- Employee Management System ---");
-            System.out.println("1. Insert Employee");
-            System.out.println("2. Display Employee");
-            System.out.println("3. Update Employee Information (Except ID)");
-            System.out.println("4. Remove Employee");
-            System.out.println("5. Exit");
+//            System.out.println("\n--- Employee Management System ---");
+//            System.out.println("1. Insert Employee");
+//            System.out.println("2. Display Employee");
+//            System.out.println("3. Update Employee Information (Except ID)");
+//            System.out.println("4. Remove Employee");
+//            System.out.println("0. Exit");
+            displayMenuHome();
+
             System.out.print("Choose an option: ");
             String choice = scanner.nextLine();
 
@@ -48,6 +55,38 @@ public class Main {
                     System.out.println("Invalid option. Please try again.");
             }
         }
+    }
+    private static void displayMenuHome() {
+        // Create a table with 2 columns
+        Table table = new Table(2, BorderStyle.UNICODE_BOX_DOUBLE_BORDER_WIDE, ShownBorders.ALL);
+
+        // Define cell styles
+        CellStyle centerAlign = new CellStyle(CellStyle.HorizontalAlign.center);
+        CellStyle leftAlign = new CellStyle(CellStyle.HorizontalAlign.left);
+
+        // Add table headers
+        table.addCell("Option", centerAlign);
+        table.addCell("Description", leftAlign);
+
+        // Add rows for each menu option
+        table.addCell(INSERT_EMPLOYEE, centerAlign);
+        table.addCell("Insert Employee", leftAlign);
+
+        table.addCell(DISPLAY_EMPLOYEES, centerAlign);
+        table.addCell("Display Employees", leftAlign);
+
+        table.addCell(UPDATE_EMPLOYEE, centerAlign);
+        table.addCell("Update Employee Information (Except ID)", leftAlign);
+
+        table.addCell(REMOVE_EMPLOYEE, centerAlign);
+        table.addCell("Remove Employee", leftAlign);
+
+        table.addCell(EXIT, centerAlign);
+        table.addCell("Exit", leftAlign);
+
+        // Print the table
+        System.out.println("\n--- Employee Management System ---");
+        System.out.println(table.render());
     }
 
     private static void insertEmployee() {
@@ -148,6 +187,7 @@ public class Main {
             table.addCell("Hour");
             table.addCell("Salary");
             table.addCell("Pay");
+
 
             // Add employee data to the table
             employees.forEach(employee -> {

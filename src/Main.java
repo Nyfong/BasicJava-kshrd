@@ -86,5 +86,8 @@ class Main {
             System.out.print(iterator.next());
             System.out.print(", ");
         }
+        System.out.println("meow");
+        System.out.println("lazy cat");
+
     }
 }
