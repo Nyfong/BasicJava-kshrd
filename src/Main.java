@@ -88,6 +88,8 @@ class Main {
         }
         System.out.println("meow");
         System.out.println("lazy cat");
+        System.out.println("lazy cat too");
+
 
     }
 }
